@@ -1,0 +1,26 @@
+{% extends 'floreriapp/base.html' %}
+
+{% block title %}Nuevo producto - Florería Bella Flor{% endblock %}
+
+{% block content %}
+<div class="card card-producto p-4" style="max-width:600px;margin:0 auto;">
+    <h1>Nuevo producto</h1>
+
+    <form method="POST" novalidate>
+        {% csrf_token %}
+
+        {% for field in form %}
+        <div class="mb-3">
+            <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+                <div class="text-danger small">{{ field.errors|striptags }}</div>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-floreria">Guardar producto</button>
+        <a href="{% url 'listado_productos' %}" class="btn btn-outline-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

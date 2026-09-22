@@ -1,0 +1,28 @@
+{% extends 'floreriapp/base.html' %}
+
+{% block title %}{{ producto.nombre }} - Florería Bella Flor{% endblock %}
+
+{% block content %}
+<div class="card card-producto p-4">
+    <h1>{{ producto.nombre }}</h1>
+    <p class="text-muted">{{ producto.get_categoria_display }}</p>
+    <p>{{ producto.descripcion|default:"Sin descripción." }}</p>
+    <p><strong>Precio:</strong> ${{ producto.precio }}</p>
+    <p><strong>Stock:</strong> {{ producto.stock }}</p>
+    <p>
+        <strong>Estado:</strong>
+        {% if producto.disponible %}
+            <span class="badge badge-disponible">Disponible</span>
+        {% else %}
+            <span class="badge badge-agotado">Agotado</span>
+        {% endif %}
+    </p>
+    <p class="text-muted"><small>Ingresado el {{ producto.fecha_ingreso }}</small></p>
+
+    <div class="mt-3">
+        <a href="{% url 'editar_producto' producto.id %}" class="btn btn-outline-primary">Editar</a>
+        <a href="{% url 'eliminar_producto' producto.id %}" class="btn btn-outline-danger">Eliminar</a>
+        <a href="{% url 'listado_productos' %}" class="btn btn-outline-secondary">← Volver al catálogo</a>
+    </div>
+</div>
+{% endblock %}

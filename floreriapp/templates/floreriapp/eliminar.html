@@ -1,0 +1,16 @@
+{% extends 'floreriapp/base.html' %}
+
+{% block title %}Eliminar {{ producto.nombre }} - Florería Bella Flor{% endblock %}
+
+{% block content %}
+<div class="card card-producto p-4" style="max-width:600px;margin:0 auto;">
+    <h1>¿Eliminar este producto?</h1>
+    <p>Estás a punto de eliminar <strong>{{ producto.nombre }}</strong>. Esta acción no se puede deshacer.</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+        <a href="{% url 'listado_productos' %}" class="btn btn-outline-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}
