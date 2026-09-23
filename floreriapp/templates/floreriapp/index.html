@@ -3,11 +3,19 @@
 
 {% block title %}Inicio - Florería Díaz{% endblock %}
 
+{% block extra_head %}
+<style>
+    .hero.con-imagen {
+        background-image: url("{% static 'floreriapp/img/hero.jpg' %}");
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="hero con-imagen p-5 mb-5 text-center" style="background-image: url('{% static 'floreriapp/img/hero.jpg' %}');">
+<div class="hero con-imagen p-5 mb-5 text-center">
     <p class="categoria-tag mb-2">Catálogo</p>
     <h1 class="font-serif display-6 mb-3">Florería Díaz</h1>
-    <p class="lead mb-4">Administra el catálogo de productos: ramos, plantas, arreglos florales y accesorios.</p>
+    <p class="lead mb-4">Administrción del catálogo de productos</p>
     <a href="{% url 'listado_productos' %}" class="btn btn-pill">Ver catálogo completo</a>
 </div>
 

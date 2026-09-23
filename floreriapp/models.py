@@ -18,5 +18,9 @@ class Producto(models.Model):
     fecha_ingreso = models.DateField(auto_now_add=True)
     imagen = models.ImageField(upload_to='productos/', blank=True, null=True)
 
+    def save(self, *args, **kwargs):
+        self.disponible = self.stock > 0
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.nombre

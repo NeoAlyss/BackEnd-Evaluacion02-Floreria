@@ -30,6 +30,16 @@
         </div>
         {% endfor %}
 
+        <div class="mb-3">
+            <p class="form-label mb-1">Estado actual</p>
+            {% if producto.disponible %}
+                <span class="badge badge-disponible">Disponible</span>
+            {% else %}
+                <span class="badge badge-agotado">Agotado</span>
+            {% endif %}
+            <div class="categoria-tag mt-1">Se calcula solo a partir del stock: se actualiza al guardar.</div>
+        </div>
+
         <div class="d-flex gap-2 mt-4">
             <button type="submit" class="btn btn-pill">Guardar cambios</button>
             <a href="{% url 'listado_productos' %}" class="btn btn-pill-outline">Cancelar</a>
