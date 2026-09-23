@@ -1,51 +1,63 @@
 {% extends 'floreriapp/base.html' %}
 
-{% block title %}Productos - Florería Bella Flor{% endblock %}
+{% block title %}Productos - Florería Díaz{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1>Catálogo de productos</h1>
-    <a href="{% url 'crear_producto' %}" class="btn btn-floreria">+ Nuevo producto</a>
+<div class="d-flex justify-content-between align-items-end mb-5">
+    <div>
+        <p class="categoria-tag mb-1">Catálogo</p>
+        <h1 class="font-serif mb-0">Nuestros productos</h1>
+    </div>
+    <a href="{% url 'crear_producto' %}" class="btn btn-pill">+ Nuevo producto</a>
 </div>
 
-{% if productos %}
-<div class="table-responsive">
-<table class="table align-middle bg-white rounded-4 overflow-hidden">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Categoría</th>
-            <th>Precio</th>
-            <th>Stock</th>
-            <th>Estado</th>
-            <th class="text-end">Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for producto in productos %}
-        <tr>
-            <td>{{ producto.nombre }}</td>
-            <td>{{ producto.get_categoria_display }}</td>
-            <td>${{ producto.precio }}</td>
-            <td>{{ producto.stock }}</td>
-            <td>
-                {% if producto.disponible %}
-                    <span class="badge badge-disponible">Disponible</span>
-                {% else %}
-                    <span class="badge badge-agotado">Agotado</span>
-                {% endif %}
-            </td>
-            <td class="text-end">
-                <a href="{% url 'detalle_producto' producto.id %}" class="btn btn-sm btn-outline-secondary">Ver</a>
-                <a href="{% url 'editar_producto' producto.id %}" class="btn btn-sm btn-outline-primary">Editar</a>
-                <a href="{% url 'eliminar_producto' producto.id %}" class="btn btn-sm btn-outline-danger">Eliminar</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-</div>
+{% if total_productos %}
+    {% for seccion in secciones %}
+    <div class="mb-5">
+        <h3 class="font-serif mb-3">{{ seccion.etiqueta }}</h3>
+
+        {% if seccion.productos %}
+        <div class="row g-4">
+            {% for producto in seccion.productos %}
+            <div class="col-sm-6 col-lg-4">
+                <div class="card card-producto">
+                    <div class="img-wrap">
+                        {% if producto.imagen %}
+                            <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
+                        {% else %}
+                            <div class="sin-imagen">🌿</div>
+                        {% endif %}
+                    </div>
+                    <div class="p-3">
+                        <div class="d-flex justify-content-between align-items-start mb-1">
+                            <p class="categoria-tag mb-0">{{ producto.get_categoria_display }}</p>
+                            {% if producto.disponible %}
+                                <span class="badge badge-disponible">Disponible</span>
+                            {% else %}
+                                <span class="badge badge-agotado">Agotado</span>
+                            {% endif %}
+                        </div>
+                        <h5 class="font-serif mb-2">{{ producto.nombre }}</h5>
+                        <p class="precio-tag mb-3">${{ producto.precio }}</p>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a href="{% url 'detalle_producto' producto.id %}" class="btn btn-sm btn-pill-outline">Ver</a>
+                            <a href="{% url 'editar_producto' producto.id %}" class="btn btn-sm btn-pill-outline">Editar</a>
+                            <a href="{% url 'eliminar_producto' producto.id %}" class="btn btn-sm btn-pill-danger">Eliminar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="categoria-tag mb-0">Sin productos en esta categoría todavía.</p>
+        {% endif %}
+    </div>
+    {% endfor %}
 {% else %}
-<p>Todavía no hay productos registrados. <a href="{% url 'crear_producto' %}">Agrega el primero</a>.</p>
+<div class="panel p-5 text-center">
+    <p class="mb-3">Todavía no hay productos registrados.</p>
+    <a href="{% url 'crear_producto' %}" class="btn btn-pill">Agrega el primero</a>
+</div>
 {% endif %}
 {% endblock %}

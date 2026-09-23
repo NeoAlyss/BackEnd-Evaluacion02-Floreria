@@ -16,8 +16,18 @@ def index(request):
 
 def listado_productos(request):
     productos = Producto.objects.all().order_by('nombre')
+
+    secciones = []
+    for clave, etiqueta in Producto.CATEGORIA_CHOICES:
+        secciones.append({
+            'clave': clave,
+            'etiqueta': etiqueta,
+            'productos': productos.filter(categoria=clave),
+        })
+
     return render(request, 'floreriapp/listado.html', {
-        'productos': productos
+        'secciones': secciones,
+        'total_productos': productos.count(),
     })
 
 
@@ -30,7 +40,7 @@ def detalle_producto(request, id):
 
 def crear_producto(request):
     if request.method == 'POST':
-        form = ProductoForm(request.POST)
+        form = ProductoForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('listado_productos')
@@ -46,7 +56,7 @@ def editar_producto(request, id):
     producto = get_object_or_404(Producto, id=id)
 
     if request.method == 'POST':
-        form = ProductoForm(request.POST, instance=producto)
+        form = ProductoForm(request.POST, request.FILES, instance=producto)
         if form.is_valid():
             form.save()
             return redirect('listado_productos')

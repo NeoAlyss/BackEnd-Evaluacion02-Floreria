@@ -1,26 +1,39 @@
 {% extends 'floreriapp/base.html' %}
 
-{% block title %}Editar {{ producto.nombre }} - Florería Bella Flor{% endblock %}
+{% block title %}Editar {{ producto.nombre }} - Florería Díaz{% endblock %}
 
 {% block content %}
-<div class="card card-producto p-4" style="max-width:600px;margin:0 auto;">
-    <h1>Editar producto</h1>
+<div class="panel p-4 p-md-5" style="max-width:600px;margin:0 auto;">
+    <p class="categoria-tag mb-1">Catálogo</p>
+    <h1 class="font-serif mb-4">Editar producto</h1>
 
-    <form method="POST" novalidate>
+    {% if producto.imagen %}
+    <div class="img-wrap mb-4" style="max-width:220px; border-radius:4px;">
+        <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
+    </div>
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data" novalidate>
         {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger">{{ form.non_field_errors|striptags }}</div>
+        {% endif %}
 
         {% for field in form %}
         <div class="mb-3">
             <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
             {{ field }}
             {% if field.errors %}
-                <div class="text-danger small">{{ field.errors|striptags }}</div>
+                <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
             {% endif %}
         </div>
         {% endfor %}
 
-        <button type="submit" class="btn btn-floreria">Guardar cambios</button>
-        <a href="{% url 'listado_productos' %}" class="btn btn-outline-secondary">Cancelar</a>
+        <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="btn btn-pill">Guardar cambios</button>
+            <a href="{% url 'listado_productos' %}" class="btn btn-pill-outline">Cancelar</a>
+        </div>
     </form>
 </div>
 {% endblock %}

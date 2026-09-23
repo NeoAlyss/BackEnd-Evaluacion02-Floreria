@@ -5,7 +5,7 @@ from .models import Producto
 class ProductoForm(forms.ModelForm):
     class Meta:
         model = Producto
-        fields = ['nombre', 'descripcion', 'categoria', 'precio', 'stock', 'disponible']
+        fields = ['nombre', 'descripcion', 'categoria', 'precio', 'stock', 'disponible', 'imagen']
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
             'descripcion': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
@@ -13,6 +13,12 @@ class ProductoForm(forms.ModelForm):
             'precio': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'min': '0.01'}),
             'stock': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
             'disponible': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'imagen': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
+        error_messages = {
+            'nombre': {
+                'unique': 'Ya existe un producto registrado con ese nombre.',
+            },
         }
 
     def clean_nombre(self):
@@ -32,3 +38,15 @@ class ProductoForm(forms.ModelForm):
         if stock is None or stock < 0:
             raise forms.ValidationError('El stock no puede ser negativo.')
         return stock
+
+    def clean(self):
+        cleaned_data = super().clean()
+        stock = cleaned_data.get('stock')
+        disponible = cleaned_data.get('disponible')
+
+        if stock == 0 and disponible:
+            raise forms.ValidationError(
+                'No puedes marcar el producto como disponible si el stock es 0.'
+            )
+
+        return cleaned_data

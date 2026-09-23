@@ -1,39 +1,50 @@
 {% extends 'floreriapp/base.html' %}
+{% load static %}
 
-{% block title %}Inicio - Florería Bella Flor{% endblock %}
+{% block title %}Inicio - Florería Díaz{% endblock %}
 
 {% block content %}
-<div class="p-5 mb-4 rounded-4" style="background-color:#f6dbe4;">
-    <h1 class="display-6">Bienvenida a Florería Bella Flor 🌷</h1>
-    <p class="lead">Administra el catálogo de productos: ramos, plantas, arreglos florales y accesorios.</p>
-    <a href="{% url 'listado_productos' %}" class="btn btn-floreria btn-lg">Ver catálogo completo</a>
+<div class="hero con-imagen p-5 mb-5 text-center" style="background-image: url('{% static 'floreriapp/img/hero.jpg' %}');">
+    <p class="categoria-tag mb-2">Catálogo</p>
+    <h1 class="font-serif display-6 mb-3">Florería Díaz</h1>
+    <p class="lead mb-4">Administra el catálogo de productos: ramos, plantas, arreglos florales y accesorios.</p>
+    <a href="{% url 'listado_productos' %}" class="btn btn-pill">Ver catálogo completo</a>
 </div>
 
-<div class="row g-3 mb-4">
+<div class="row g-3 mb-5">
     <div class="col-md-6">
-        <div class="card card-producto p-3 text-center">
-            <h2>{{ total_productos }}</h2>
-            <p class="mb-0">Productos registrados</p>
+        <div class="panel p-4 text-center">
+            <h2 class="font-serif mb-1">{{ total_productos }}</h2>
+            <p class="categoria-tag mb-0">Productos registrados</p>
         </div>
     </div>
     <div class="col-md-6">
-        <div class="card card-producto p-3 text-center">
-            <h2>{{ disponibles }}</h2>
-            <p class="mb-0">Disponibles ahora mismo</p>
+        <div class="panel p-4 text-center">
+            <h2 class="font-serif mb-1">{{ disponibles }}</h2>
+            <p class="categoria-tag mb-0">Disponibles ahora mismo</p>
         </div>
     </div>
 </div>
 
 {% if ultimos %}
-<h3 class="mb-3">Últimos productos agregados</h3>
-<div class="row g-3">
+<h3 class="font-serif mb-4">Últimos productos agregados</h3>
+<div class="row g-4">
     {% for producto in ultimos %}
     <div class="col-md-4">
-        <div class="card card-producto p-3">
-            <h5>{{ producto.nombre }}</h5>
-            <p class="text-muted mb-1">{{ producto.get_categoria_display }}</p>
-            <p class="fw-bold mb-2">${{ producto.precio }}</p>
-            <a href="{% url 'detalle_producto' producto.id %}" class="btn btn-sm btn-outline-secondary">Ver detalle</a>
+        <div class="card card-producto">
+            <div class="img-wrap">
+                {% if producto.imagen %}
+                    <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
+                {% else %}
+                    <div class="sin-imagen">🌿</div>
+                {% endif %}
+            </div>
+            <div class="p-3">
+                <p class="categoria-tag mb-1">{{ producto.get_categoria_display }}</p>
+                <h5 class="font-serif mb-2">{{ producto.nombre }}</h5>
+                <p class="precio-tag mb-3">${{ producto.precio }}</p>
+                <a href="{% url 'detalle_producto' producto.id %}" class="btn btn-sm btn-pill-outline">Ver detalle</a>
+            </div>
         </div>
     </div>
     {% endfor %}

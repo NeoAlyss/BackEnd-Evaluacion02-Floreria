@@ -86,4 +86,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# Archivos de medios (imágenes subidas por el usuario, p. ej. fotos de productos)
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
